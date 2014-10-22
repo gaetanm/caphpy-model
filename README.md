@@ -1,4 +1,4 @@
 caphpy-model
 ============
 
-An example of model (mvc) taken from my personal framework CaPHPy
+An example of model (MVC) taken from my personal framework CaPHPy
