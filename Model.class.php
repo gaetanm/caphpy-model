@@ -131,7 +131,7 @@ class Model
      *
      * @return Entity $object
      */
-    private function asObject($entity, $q, $getFkAsObject)
+    public function asObject($entity, $q, $getFkAsObject)
     {
         $object = $q->fetchObject('Application\\Entity\\'.$entity);
         if ($getFkAsObject) $this->getFkAsObject($object);
@@ -147,7 +147,7 @@ class Model
      *
      * @return array $objects
      */
-    private function asObjectArray($entity, $q, $getFkAsObject)
+    public function asObjectArray($entity, $q, $getFkAsObject)
     {
         $objects = $q->fetchAll(PDO::FETCH_CLASS, 'Application\\Entity\\'.$entity);
 
