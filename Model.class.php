@@ -133,7 +133,10 @@ class Model
      */
     public function asObject($entity, $q, $getFkAsObject)
     {
-        $object = $q->fetchObject('Application\\Entity\\'.$entity);
+        if ($entity == 'stdClass')
+            $object = $q->fetchObject('\\'.$entity);
+        else
+            $object = $q->fetchObject('Application\\Entity\\'.$entity);
         if ($getFkAsObject) $this->getFkAsObject($object);
         return $object;
     }
@@ -149,7 +152,10 @@ class Model
      */
     public function asObjectArray($entity, $q, $getFkAsObject)
     {
-        $objects = $q->fetchAll(PDO::FETCH_CLASS, 'Application\\Entity\\'.$entity);
+        if ($entity == 'stdClass')
+            $objects = $q->fetchAll(PDO::FETCH_CLASS, '\\'.$entity);
+        else
+            $objects = $q->fetchAll(PDO::FETCH_CLASS, 'Application\\Entity\\'.$entity);
 
         if ($getFkAsObject)
         {
