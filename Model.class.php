@@ -233,7 +233,7 @@ class Model
     public function exists($entity, $inputQuery, $data)
     {
         $param = $this->parseQuery($inputQuery, $data);
-        $query = 'SELECT COUNT(*) FROM '.strtolower($entity).' '.$inputQuery;
+        $query = 'SELECT COUNT(*) FROM '.lcfirst($entity).' '.$inputQuery;
 
         try
         {
@@ -262,12 +262,12 @@ class Model
         if ($inputQuery != null)
         {
             $param = $this->parseQuery($inputQuery, $data);
-            $query = 'SELECT COUNT(*) FROM '.strtolower($entity).' '.$inputQuery;
+            $query = 'SELECT COUNT(*) FROM '.lcfirst($entity).' '.$inputQuery;
         }
         else
         {
             $param = null;
-            $query = 'SELECT COUNT(*) FROM '.strtolower($entity);
+            $query = 'SELECT COUNT(*) FROM '.lcfirst($entity);
         }
         try
         {
@@ -356,7 +356,7 @@ class Model
 
         $tableName = explode('\\', get_class($entity));
         $tableName = $tableName[count($tableName)-1];
-        $query = 'INSERT INTO '.strtolower($tableName).' ('.$attributes.') VALUES ('.$q.')';
+        $query = 'INSERT INTO '.lcfirst($tableName).' ('.$attributes.') VALUES ('.$q.')';
 
         try
         {
@@ -386,7 +386,7 @@ class Model
     public function select($entity, $inputQuery, $data = null, $getFkAsObject = true)
     {
         $param = $this->parseQuery($inputQuery, $data);
-        $query = 'SELECT * FROM '.strtolower($entity).' '.$inputQuery;
+        $query = 'SELECT * FROM '.lcfirst($entity).' '.$inputQuery;
         try
         {
             if (!array_key_exists($query, $this->stmt))
@@ -415,11 +415,11 @@ class Model
         if ($inputQuery != null)
         {
             $param = $this->parseQuery($inputQuery, $data);
-            $query = 'SELECT * FROM '.strtolower($entity).' '.$inputQuery;
+            $query = 'SELECT * FROM '.lcfirst($entity).' '.$inputQuery;
         }
         else
         {
-            $query = 'SELECT * FROM '.strtolower($entity);
+            $query = 'SELECT * FROM '.lcfirst($entity);
             $param = null;
         }
         try
@@ -474,7 +474,7 @@ class Model
             $param = $val;
             $param = $this->parseQuery($inputQuery, $param);
             $param = array_merge($data[1], $param);
-            $query = 'UPDATE '.strtolower($tableName).' SET '.$data[0].' '.$inputQuery;
+            $query = 'UPDATE '.lcfirst($tableName).' SET '.$data[0].' '.$inputQuery;
         }
         else
         {
@@ -484,10 +484,10 @@ class Model
             if ($inputQuery != null)
             {
                 $param = array_merge($attributes[1], $this->parseQuery($inputQuery, $data));
-                $query = 'UPDATE '.strtolower($tableName).' SET '.$attributes[0].' '.$inputQuery;
+                $query = 'UPDATE '.lcfirst($tableName).' SET '.$attributes[0].' '.$inputQuery;
             }
             else
-                $query = 'UPDATE '.strtolower($tableName).' SET '.$attributes[0];
+                $query = 'UPDATE '.lcfirst($tableName).' SET '.$attributes[0];
         }
         try
         {
@@ -528,12 +528,12 @@ class Model
             if ($data != null)
             {
                 $param = $this->parseQuery($inputQuery, $data);
-                $query = 'DELETE FROM '.strtolower($tableName).' '.$inputQuery;
+                $query = 'DELETE FROM '.lcfirst($tableName).' '.$inputQuery;
             }
 
             else
             {
-                $query = 'TRUNCATE TABLE '.strtolower($tableName);
+                $query = 'TRUNCATE TABLE '.lcfirst($tableName);
                 $param = null;
             }
 
