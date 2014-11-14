@@ -232,8 +232,13 @@ class Model
      */
     public function exists($entity, $inputQuery, $data)
     {
+        $c = 'Application\\Entity\\'.$entity;
+        if (isset($c::$tableName))
+            $tableName = $c::$tableName;
+        else
+            $tableName = lcfirst($entity);
         $param = $this->parseQuery($inputQuery, $data);
-        $query = 'SELECT COUNT(*) FROM '.lcfirst($entity).' '.$inputQuery;
+        $query = 'SELECT COUNT(*) FROM '.$tableName.' '.$inputQuery;
 
         try
         {
@@ -259,15 +264,20 @@ class Model
      */
     public function count($entity, $inputQuery = null, $data = null)
     {
+        $c = 'Application\\Entity\\'.$entity;
+        if (isset($c::$tableName))
+            $tableName = $c::$tableName;
+        else
+            $tableName = lcfirst($entity);
         if ($inputQuery != null)
         {
             $param = $this->parseQuery($inputQuery, $data);
-            $query = 'SELECT COUNT(*) FROM '.lcfirst($entity).' '.$inputQuery;
+            $query = 'SELECT COUNT(*) FROM '.$tableName.' '.$inputQuery;
         }
         else
         {
             $param = null;
-            $query = 'SELECT COUNT(*) FROM '.lcfirst($entity);
+            $query = 'SELECT COUNT(*) FROM '.$tableName;
         }
         try
         {
@@ -354,10 +364,14 @@ class Model
             $param[] = $value;
         }
 
-        $tableName = explode('\\', get_class($entity));
-        $tableName = $tableName[count($tableName)-1];
-        $query = 'INSERT INTO '.lcfirst($tableName).' ('.$attributes.') VALUES ('.$q.')';
-
+        if (isset($entity::$tableName))
+            $tableName = $entity::$tableName;
+        else
+        {
+            $tableName = explode('\\', get_class($entity));
+            $tableName = lcfirst($tableName[count($tableName)-1]);
+        }
+        $query = 'INSERT INTO '.$tableName.' ('.$attributes.') VALUES ('.$q.')';
         try
         {
             if (!array_key_exists($query, $this->stmt))
@@ -385,8 +399,13 @@ class Model
      */
     public function select($entity, $inputQuery, $data = null, $getFkAsObject = true)
     {
+        $c = 'Application\\Entity\\'.$entity;
+        if (isset($c::$tableName))
+            $tableName = $c::$tableName;
+        else
+            $tableName = lcfirst($entity);
         $param = $this->parseQuery($inputQuery, $data);
-        $query = 'SELECT * FROM '.lcfirst($entity).' '.$inputQuery;
+        $query = 'SELECT * FROM '.$tableName.' '.$inputQuery;
         try
         {
             if (!array_key_exists($query, $this->stmt))
@@ -412,14 +431,19 @@ class Model
      */
     public function selectSeveral($entity, $inputQuery = null, $data = null, $getFkAsObject = true)
     {
+        $c = 'Application\\Entity\\'.$entity;
+        if (isset($c::$tableName))
+            $tableName = $c::$tableName;
+        else
+            $tableName = lcfirst($entity);
         if ($inputQuery != null)
         {
             $param = $this->parseQuery($inputQuery, $data);
-            $query = 'SELECT * FROM '.lcfirst($entity).' '.$inputQuery;
+            $query = 'SELECT * FROM '.$tableName.' '.$inputQuery;
         }
         else
         {
-            $query = 'SELECT * FROM '.lcfirst($entity);
+            $query = 'SELECT * FROM '.$tableName;
             $param = null;
         }
         try
@@ -445,8 +469,13 @@ class Model
      */
     public function update($entity, $attributes = null, $inputQuery = null, $data = null)
     {
-        $tableName = explode('\\', get_class($entity));
-        $tableName = $tableName[count($tableName)-1];
+        if (isset($entity::$tableName))
+            $tableName = $entity::$tableName;
+        else
+        {
+            $tableName = explode('\\', get_class($entity));
+            $tableName = lcfirst($tableName[count($tableName)-1]);
+        }
         $param = null;
         if (is_object($entity))
         {
@@ -474,7 +503,7 @@ class Model
             $param = $val;
             $param = $this->parseQuery($inputQuery, $param);
             $param = array_merge($data[1], $param);
-            $query = 'UPDATE '.lcfirst($tableName).' SET '.$data[0].' '.$inputQuery;
+            $query = 'UPDATE '.$tableName.' SET '.$data[0].' '.$inputQuery;
         }
         else
         {
@@ -484,10 +513,10 @@ class Model
             if ($inputQuery != null)
             {
                 $param = array_merge($attributes[1], $this->parseQuery($inputQuery, $data));
-                $query = 'UPDATE '.lcfirst($tableName).' SET '.$attributes[0].' '.$inputQuery;
+                $query = 'UPDATE '.$tableName.' SET '.$attributes[0].' '.$inputQuery;
             }
             else
-                $query = 'UPDATE '.lcfirst($tableName).' SET '.$attributes[0];
+                $query = 'UPDATE '.$tableName.' SET '.$attributes[0];
         }
         try
         {
@@ -510,11 +539,17 @@ class Model
      */
     public function delete($entity, $inputQuery = null, $data = null)
     {
-        $tableName = $entity;
+        $tableName = lcfirst($entity);
         if (is_object($entity))
         {
-            $tableName = explode('\\', get_class($entity));
-            $tableName = $tableName[count($tableName)-1];
+
+            if (isset($entity::$tableName))
+                $tableName = $entity::$tableName;
+            else
+            { 
+                $tableName = explode('\\', get_class($entity));
+                $tableName = lcfirst($tableName[count($tableName)-1]);
+            }
 
             if (!isset($entity->pk)) $id = 'id';
             else $id = $entity->pk;
@@ -528,12 +563,12 @@ class Model
             if ($data != null)
             {
                 $param = $this->parseQuery($inputQuery, $data);
-                $query = 'DELETE FROM '.lcfirst($tableName).' '.$inputQuery;
+                $query = 'DELETE FROM '.$tableName.' '.$inputQuery;
             }
 
             else
             {
-                $query = 'TRUNCATE TABLE '.lcfirst($tableName);
+                $query = 'TRUNCATE TABLE '.$tableName;
                 $param = null;
             }
 
