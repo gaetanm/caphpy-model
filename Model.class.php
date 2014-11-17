@@ -236,7 +236,7 @@ class Model
         if (isset($c::$tableName))
             $tableName = $c::$tableName;
         else
-            $tableName = lcfirst($entity);
+            $tableName = strtolower($entity);
         $param = $this->parseQuery($inputQuery, $data);
         $query = 'SELECT COUNT(*) FROM '.$tableName.' '.$inputQuery;
 
@@ -268,7 +268,7 @@ class Model
         if (isset($c::$tableName))
             $tableName = $c::$tableName;
         else
-            $tableName = lcfirst($entity);
+            $tableName = strtolower($entity);
         if ($inputQuery != null)
         {
             $param = $this->parseQuery($inputQuery, $data);
@@ -369,7 +369,7 @@ class Model
         else
         {
             $tableName = explode('\\', get_class($entity));
-            $tableName = lcfirst($tableName[count($tableName)-1]);
+            $tableName = strtolower($tableName[count($tableName)-1]);
         }
         $query = 'INSERT INTO '.$tableName.' ('.$attributes.') VALUES ('.$q.')';
         try
@@ -403,7 +403,7 @@ class Model
         if (isset($c::$tableName))
             $tableName = $c::$tableName;
         else
-            $tableName = lcfirst($entity);
+            $tableName = strtolower($entity);
         $param = $this->parseQuery($inputQuery, $data);
         $query = 'SELECT * FROM '.$tableName.' '.$inputQuery;
         try
@@ -435,7 +435,7 @@ class Model
         if (isset($c::$tableName))
             $tableName = $c::$tableName;
         else
-            $tableName = lcfirst($entity);
+            $tableName = strtolower($entity);
         if ($inputQuery != null)
         {
             $param = $this->parseQuery($inputQuery, $data);
@@ -474,7 +474,7 @@ class Model
         else
         {
             $tableName = explode('\\', get_class($entity));
-            $tableName = lcfirst($tableName[count($tableName)-1]);
+            $tableName = strtolower($tableName[count($tableName)-1]);
         }
         $param = null;
         if (is_object($entity))
@@ -539,7 +539,7 @@ class Model
      */
     public function delete($entity, $inputQuery = null, $data = null)
     {
-        $tableName = lcfirst($entity);
+        $tableName = $entity;
         if (is_object($entity))
         {
 
@@ -548,7 +548,7 @@ class Model
             else
             { 
                 $tableName = explode('\\', get_class($entity));
-                $tableName = lcfirst($tableName[count($tableName)-1]);
+                $tableName = strtolower($tableName[count($tableName)-1]);
             }
 
             if (!isset($entity->pk)) $id = 'id';
