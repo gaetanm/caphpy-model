@@ -539,18 +539,29 @@ class Model
      */
     public function delete($entity, $inputQuery = null, $data = null)
     {
-        $c = 'Application\\Entity\\'.$entity;
-        if (isset($c::$tableName))
-            $tableName = $c::$tableName;
-        else
-            $tableName = strtolower($entity);
         if (is_object($entity))
         {
+            if (isset($entity::$tableName))
+                $tableName = $entity::$tableName;
+            else
+            {
+                $tableName = explode('\\', get_class($entity));
+                $tableName = strtolower($tableName[count($tableName)-1]);
+            }
+
             if (!isset($entity->pk)) $id = 'id';
             else $id = $entity->pk;
 
             $inputQuery = 'WHERE id = ?';
             $data = $entity->$id;
+        }
+        else
+        {
+            $c = 'Application\\Entity\\'.$entity;
+            if (isset($c::$tableName))
+                $tableName = $c::$tableName;
+            else
+                $tableName = strtolower($entity);
         }
 
         try
