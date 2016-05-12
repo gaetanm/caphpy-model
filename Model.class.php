@@ -318,7 +318,7 @@ class Model
     }
 
     /**
-     * Inserts the data of the actual instance into the database and hydrates his id.
+     * Inserts the data of the actual instance into the database and hydrates its id.
      *
      * @param string $entity
      * @param bool   $enableAI
